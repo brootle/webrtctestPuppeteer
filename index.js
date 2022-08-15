@@ -21,18 +21,20 @@ const puppeteer = require('puppeteer');
   console.log("Wait for 5 seconds...")
   await page.waitForTimeout(5000)
 
+  console.log("Enter webrtc stream url: ", streamUrl)
   await page.waitForSelector('#url');
   await page.type('#url', streamUrl);
+  console.log("Click start to initialize connection...")
   await page.click('#start');
-  console.log("Wait for 10 seconds...")
-  await page.waitForTimeout(10000)  
+  // console.log("Wait for 10 seconds...")
+  // await page.waitForTimeout(10000)  
 
-  console.log("Taking screenshot...")
-  await page.screenshot({path: 'screenshot.png'});
+  // console.log("Taking screenshot...")
+  // await page.screenshot({path: 'screenshot.png'});
 
-  console.log("Wait for 5 seconds...")
-  await page.waitForTimeout(5000)
+  // console.log("Wait for 5 seconds...")
+  // await page.waitForTimeout(5000)
 
-  console.log("Closing browser...")
-  await browser.close();
+  // console.log("Closing browser...")
+  // await browser.close();
 })();
