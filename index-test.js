@@ -10,11 +10,13 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch(
     {
-        // headless: false,
+        //headless: false,
+        headless: 'chrome',
         args:[
             // `--use-fake-device-for-media-stream`,
             // `--use-fake-ui-for-media-stream`,
             `--no-sandbox`,
+            '--autoplay-policy=no-user-gesture-required'
         ]
     }
   );

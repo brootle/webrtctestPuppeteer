@@ -7,7 +7,13 @@ const puppeteer = require('puppeteer');
 
   //const browser = await puppeteer.launch(); // await puppeteer.launch({args:['--no-sandbox']});
   console.log("Launching browser...")
-  const browser = await puppeteer.launch({args:['--no-sandbox']});
+  const browser = await puppeteer.launch({
+    headless: 'chrome',
+    args:[
+      '--no-sandbox',
+      '--autoplay-policy=no-user-gesture-required'
+    ]
+  });
   console.log("Browser launched!")
 
   console.log("Opening new page...")
@@ -43,11 +49,12 @@ const puppeteer = require('puppeteer');
   await page.type('#url', streamUrl);
   console.log("Click start to initialize connection...")
   await page.click('#start');
-  // console.log("Wait for 10 seconds...")
-  // await page.waitForTimeout(10000)  
 
-  // console.log("Taking screenshot...")
-  // await page.screenshot({path: 'screenshot.png'});
+  console.log("Wait for 10 seconds...")
+  await page.waitForTimeout(10000)  
+
+  console.log("Taking screenshot...")
+  await page.screenshot({path: 'screenshot.png'});
 
   // console.log("Wait for 5 seconds...")
   // await page.waitForTimeout(5000)
