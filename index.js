@@ -16,6 +16,7 @@ const puppeteer = require('puppeteer');
 
   // https://stackoverflow.com/a/59871321/6261255
   // check Websocket messages
+  // see also here https://vanilla.aslushnikov.com/?Network.webSocketFrameReceived
   console.log("Wait for 5 seconds...")
   await page.waitForTimeout(5000)  
   const client = await page.target().createCDPSession();
@@ -23,7 +24,12 @@ const puppeteer = require('puppeteer');
   client.on('Network.webSocketFrameReceived', ({ requestId, timestamp, response }) => {
     console.log("Network.webSocketFrameReceived")
     console.log(response);
-  });      
+  });   
+  client.on('Network.webSocketFrameSent', ({ requestId, timestamp, response }) => {
+    console.log("Network.webSocketFrameSent")
+    console.log(response);
+  });     
+  
 
   console.log("Go to ", url)
   await page.goto(url);
