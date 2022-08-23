@@ -7,12 +7,36 @@ const puppeteer = require('puppeteer');
 
   //const browser = await puppeteer.launch(); // await puppeteer.launch({args:['--no-sandbox']});
   console.log("Launching browser...")
-  const browser = await puppeteer.launch({args:['--no-sandbox']});
+
+  const browser = await puppeteer.launch(
+    {
+        // headless: false,
+        args:[
+            // `--use-fake-device-for-media-stream`,
+            // `--use-fake-ui-for-media-stream`,
+            `--no-sandbox`,
+        ]
+    }
+  );
+
+
+
   console.log("Browser launched!")
 
   console.log("Opening new page...")
   const page = await browser.newPage();
   console.log("New page opened!")
+
+  // https://stackoverflow.com/a/59871321/6261255
+  console.log("Wait for 5 seconds...")
+  await page.waitForTimeout(5000)  
+  const client = await page.target().createCDPSession();
+  await client.send('Network.enable');
+  client.on('Network.webSocketFrameReceived', ({ requestId, timestamp, response }) => {
+    console.log("Network.webSocketFrameReceived")
+    console.log(response);
+  });    
+
 
   console.log("Go to ", url)
   await page.goto(url);
@@ -35,10 +59,21 @@ const puppeteer = require('puppeteer');
   console.log("Taking screenshot...")
   await page.screenshot({path: 'screenshot.png'});
 
-  console.log("Wait for 5 seconds...")
-  await page.waitForTimeout(5000)
+// START https://stackoverflow.com/a/57894554/6261255
+//   const cdp = await page.target().createCDPSession();
+//   await cdp.send('Network.enable');
+//   await cdp.send('Page.enable');
 
-  console.log("Closing browser...")
-  await browser.close();
+//   const printResponse = response => console.log('response: ', response);
+
+//   cdp.on('Network.webSocketFrameReceived', printResponse); // Fired when WebSocket message is received.
+//   cdp.on('Network.webSocketFrameSent', printResponse); // Fired when WebSocket message is sent.  
+// END
+
+//   console.log("Wait for 5 seconds...")
+//   await page.waitForTimeout(5000)
+
+//   console.log("Closing browser...")
+//   await browser.close();
 
 })();

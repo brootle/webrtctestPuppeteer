@@ -14,6 +14,17 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
   console.log("New page opened!")
 
+  // https://stackoverflow.com/a/59871321/6261255
+  // check Websocket messages
+  console.log("Wait for 5 seconds...")
+  await page.waitForTimeout(5000)  
+  const client = await page.target().createCDPSession();
+  await client.send('Network.enable');
+  client.on('Network.webSocketFrameReceived', ({ requestId, timestamp, response }) => {
+    console.log("Network.webSocketFrameReceived")
+    console.log(response);
+  });      
+
   console.log("Go to ", url)
   await page.goto(url);
   console.log("Url opened")
