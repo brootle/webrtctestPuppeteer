@@ -20,6 +20,8 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
   console.log("New page opened!")
 
+  page.on("console", consoleObj => console.log("BROWSER LOG: ", consoleObj.text()));
+
   // https://stackoverflow.com/a/59871321/6261255
   // check Websocket messages
   // see also here https://vanilla.aslushnikov.com/?Network.webSocketFrameReceived

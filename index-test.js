@@ -38,7 +38,10 @@ const puppeteer = require('puppeteer');
     console.log("Network.webSocketFrameReceived")
     console.log(response);
   });    
-
+  client.on('Network.webSocketFrameSent', ({ requestId, timestamp, response }) => {
+    console.log("Network.webSocketFrameSent")
+    console.log(response);
+  });  
 
   console.log("Go to ", url)
   await page.goto(url);
@@ -53,13 +56,14 @@ const puppeteer = require('puppeteer');
   console.log("Click start to initialize connection...")
   await page.click('#start');
 
-  console.log("Wait for 10 seconds...")
-  await page.waitForTimeout(10000)  
 
-  // play button - op-bigbutton op-con op-play-big
-
-  console.log("Taking screenshot...")
-  await page.screenshot({path: 'screenshot.png'});
+  for (let index = 0; index < 10; index++) {
+    console.log("Wait for 10 seconds...")
+    await page.waitForTimeout(10000) 
+    console.log("Taking screenshot...")
+    await page.screenshot({path: `screenshot${index}.png`}); 
+  }
+  
 
 // START https://stackoverflow.com/a/57894554/6261255
 //   const cdp = await page.target().createCDPSession();
